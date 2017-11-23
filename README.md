@@ -1,18 +1,7 @@
 # wlhn-a-star
 
-A Quil sketch designed to ... well, that part is up to you.
+A\* algorithym implementation in Clojure. Rendering through Quil.
 
-## Usage
+This was hacked (emphasis on hacked) together at the West London Hack Night 23-11-2017.
 
-LightTable - open `core.clj` and press `Ctrl+Shift+Enter` to evaluate the file.
-
-Emacs - run cider, open `core.clj` and press `C-c C-k` to evaluate the file.
-
-REPL - run `(require 'wlhn-a-star.core)`.
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+It does not work yet, but it's almost there.
