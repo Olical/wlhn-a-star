@@ -1,6 +1,8 @@
 # A* in Clojure
 
-<img src="images/basic.png?raw=true" align="center" alt="An example A* in Clojure render." />
+<p align="center">
+  <img src="images/basic.png?raw=true" alt="An example A* in Clojure render." />
+</p>
 
 [A\* algorithm][a-star] implementation in [Clojure][]. Rendering is performed with [Quil][].
 
