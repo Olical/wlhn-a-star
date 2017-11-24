@@ -1,4 +1,5 @@
 (ns wlhn-a-star.core
+  (:gen-class)
   (:require [quil.core :as q]
             [quil.middleware :as m]
             [clojure.set :as set]))
@@ -138,8 +139,6 @@
 (defn y->py [y]
   (+ margin (* y (/ (- height (* margin 2)) rows))))
 
-
-
 (defn draw-state [{:keys [nodes path]}]
   (q/background 255 255 255 255)
 
@@ -166,7 +165,7 @@
           :o (q/fill 0 0 0 50))
         (q/ellipse px py node-size node-size)))))
 
-(comment
+(defn -main []
   (q/defsketch wlhn-a-star
     :title "West London Hack Night A*"
     :size [width height]

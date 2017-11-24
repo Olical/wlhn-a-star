@@ -8,6 +8,16 @@
 
 [A\* algorithm][a-star] implementation in [Clojure][]. Rendering is performed with [Quil][].
 
+## Usage
+
+Once you have [leiningen][] installed, you may simply execute `lein run` in your terminal.
+
+If you have an editor set up that allows you to interactively work with Clojure (like Emacs+CIDER, Vim+fireplace or [Cursive][]), you may simply open `src/wlhn_a_star/core.clj` and execute the code in your REPL.
+
+Evaluating the body of `-main` will start the Quil rendering. In Emacs I use `C-c C-k` to evaluate the entire buffer which will then be re-rendered by Quil.
+
+In [Spacemacs][] (I highly recommend this if you're getting into Clojure, the other "batteries included" solution would be [Cursive][]) you can also use bindings such as `,ee` to evaluate the previous form and observe the effects in the render window.
+
 ## Unlicenced
 
 Find the full [unlicense][] in the `UNLICENSE` file, but here's a snippet.
@@ -22,3 +32,6 @@ Do what you want. Learn as much as you can. Unlicense more software.
 [clojure]: https://clojure.org/
 [quil]: http://quil.info/
 [unlicense]: http://unlicense.org/
+[leiningen]: https://leiningen.org/
+[spacemacs]: http://spacemacs.org/
+[cursive]: https://cursive-ide.com/

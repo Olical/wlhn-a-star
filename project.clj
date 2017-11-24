@@ -4,4 +4,5 @@
   :license {:name "The Unlicense"
             :url "https://unlicense.org/"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [quil "2.6.0"]])
+                 [quil "2.6.0"]]
+  :main wlhn-a-star.core)
