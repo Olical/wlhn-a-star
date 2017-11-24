@@ -1,12 +1,10 @@
 # A* in Clojure
 
-> A [West London Hack Night][wlhn] (23-11-2017) production.
->
-> Emphasis on _hack_.
-
 ![An image of an example render.](images/basic.png?raw=true "Render of A* being solved in Clojure.")
 
 [A\* algorithm][a-star] implementation in [Clojure][]. Rendering is performed with [Quil][].
+
+Built during [West London Hack Night][wlhn] on 23rd of November, 2017. Emphasis on _hack_, some parts of the code aren't very elegant.
 
 ## Usage
 
