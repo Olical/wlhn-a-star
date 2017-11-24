@@ -1,8 +1,6 @@
 # A* in Clojure
 
-<center>
-![An image of an example render.](images/basic.png?raw=true "Render of A* being solved in Clojure.")
-</center>
+<img src="images/basic.png?raw=true" align="center" alt="An example A* in Clojure render." />
 
 [A\* algorithm][a-star] implementation in [Clojure][]. Rendering is performed with [Quil][].
 
