@@ -115,22 +115,61 @@
                      g-score
                      f-score))))))))
 
-(def result {:solution (a-star world)})
+(def static-state {:path (a-star world)
+                   :nodes (flatten world)})
 
 (defn setup []
-  (q/frame-rate 30)
-  {})
+  (q/frame-rate 5)
+  static-state)
 
-(defn update-state [state]
-  result)
+(defn update-state [_]
+  static-state)
 
-(defn draw-state [state]
-  (q/background 255))
+(def width 500)
+(def height 500)
+(def margin 50)
+(def node-size 50)
+(def rows (dec (count world)))
+(def columns (dec (count (first world))))
+
+(defn x->px [x]
+  (+ margin (* x (/ (- width (* margin 2)) columns))))
+
+(defn y->py [y]
+  (+ margin (* y (/ (- height (* margin 2)) rows))))
+
+
+
+(defn draw-state [{:keys [nodes path]}]
+  (q/background 255 255 255 255)
+
+  (do
+    (q/stroke 180 180 240 255)
+    (q/stroke-weight 5)
+    (doseq [[{from-x :x, from-y :y} {to-x :x, to-y :y}] (map vector path (rest path))]
+      (let [from-px (x->px from-x)
+            from-py (y->py from-y)
+            to-px (x->px to-x)
+            to-py (y->py to-y)]
+        (q/line from-px from-py
+                to-px to-py))))
+
+  (do
+    (q/no-stroke)
+    (doseq [{:keys [x y token]} nodes]
+      (let [px (x->px x)
+            py (y->py y)]
+        (case token
+          :s (q/fill 100 230 100 255)
+          :e (q/fill 230 100 100 255)
+          :x (q/fill 0 0 0 200)
+          :o (q/fill 0 0 0 50))
+        (q/ellipse px py node-size node-size)))))
 
 (comment
   (q/defsketch wlhn-a-star
     :title "West London Hack Night A*"
-    :size [500 500]
+    :size [width height]
     :setup setup
     :update update-state
     :draw draw-state
