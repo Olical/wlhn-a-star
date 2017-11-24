@@ -4,7 +4,7 @@
             [clojure.set :as set]))
 
 ;; Warning: HERE BE DRAGONS
-;; This is probably the most horrible and messy Clojure I have every written.
+;; This is probably the most horrible and messy Clojure I have ever written.
 ;; The reason for that is it was rushed in around an hour, I was learning A* as I went along and the example is extremely imperative.
 
 ;; This is extremely inefficient and not idiomatic in any way, you may still find it interesting though.
@@ -26,45 +26,50 @@
 ;; We have "f score" which maps nodes to the total cost of getting from the node to the goal. (via this node)
 ;; The f score defaults to just the first node with a heuristic value. (like, how many nodes we have * 10)
 
-(defn xy->kw [x y]
-  (keyword (str x "-" y)))
-
-(defn neighbours [world x y]
-  (->> [((xy->kw (dec x) y) world)
-        ((xy->kw x (dec y)) world)
-        ((xy->kw (inc x) y) world)
-        ((xy->kw x (inc y)) world)]
-       (into #{} (remove (some-fn nil? #(= :x (:token %)))))))
+(def neighbour-relations
+  [{:x -1, :y 0}
+   {:x 0, :y -1}
+   {:x 1, :y 0}
+   {:x 0, :y 1}])
 
 (defn build-world [src]
-  (let [world (->> (flatten
-                    (map-indexed
-                     (fn [y row]
-                       (map-indexed
-                        (fn [x token]
-                          {:x x
-                           :y y
-                           :token token})
-                        row))
-                     src))
-                   (reduce
-                    (fn [acc {:keys [x y] :as node}]
-                      (assoc acc (xy->kw x y) node))
-                    {}))]
-    (remove #(= :x (:token %)) (map
-                                (fn [[_ {:keys [x y] :as node}]]
-                                  (assoc node
-                                         :neighbours
-                                         (neighbours world x y)))
-                                world))))
+  (vec
+   (map-indexed
+    (fn [y row]
+      (vec
+       (map-indexed
+        (fn [x token]
+          (let [neighbour-positions (map #(merge-with + {:x x, :y y} %) neighbour-relations)]
+            {:x x
+             :y y
+             :token token
+             :neighbours (into #{}
+                               (comp (map (fn [{:keys [x y] :as pos}]
+                                            (assoc pos :token (get-in src [y x]))))
+                                     (remove (fn [{:keys [token]}]
+                                               (or (= :x token) (nil? token)))))
+                               neighbour-positions)}))
+        row)))
+    src)))
+
+(defn neighbours [{neighbour-positions :neighbours} world]
+  (set (map
+        (fn [{:keys [x y]}]
+          (get-in world [y x]))
+        neighbour-positions)))
 
 (def world (build-world [[:s :o :x :e]
                          [:o :o :x :o]
                          [:o :x :x :o]
                          [:o :o :o :o]]))
 
-(defn reconstruct-path [& args]
-  (prn "Reconstruct" args))
+(defn reconstruct-path [came-from current]
+  (loop [current current
+         path (list current)]
+    (if (contains? came-from current)
+      (let [next-node (get came-from current)]
+        (recur next-node (conj path next-node)))
+      path)))
 
 (defn score [m node]
   (get m node Double/POSITIVE_INFINITY))
@@ -73,9 +78,12 @@
   (+ (Math/abs (- a-x b-x))
      (Math/abs (- a-y b-y))))
 
+(defn find-token [world token]
+  (first (filter #(= token (:token %)) (flatten world))))
+
 (defn a-star [world]
-  (let [start (first (filter #(= :s (:token %)) world))
-        end (first (filter #(= :e (:token %)) world))]
+  (let [start (find-token world :s)
+        end (find-token world :e)]
     (loop [closed #{}
            open #{start}
            came-from {}
@@ -88,7 +96,7 @@
             (reconstruct-path came-from current)
             (let [open (remove #{current} open)
                   closed (conj closed current)
-                  neighbours (remove closed (:neighbours current))
+                  neighbours (remove closed (neighbours current world))
                   {:keys [came-from g-score f-score]} (reduce
                                                        (fn [{:keys [came-from g-score f-score] :as acc} neighbour]
                                                          (let [maybe-g-score (+ (score g-score current) (distance current neighbour))]
@@ -107,7 +115,7 @@
                      g-score
                      f-score))))))))
 
-(def result {:solution (doto (a-star world) prn)})
+(def result {:solution (a-star world)})
 
 (defn setup []
   (q/frame-rate 30)
