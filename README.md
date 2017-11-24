@@ -35,3 +35,4 @@ Do what you want. Learn as much as you can. Unlicense more software.
 [leiningen]: https://leiningen.org/
 [spacemacs]: http://spacemacs.org/
 [cursive]: https://cursive-ide.com/
+[wlhn]: https://www.meetup.com/West-London-Hack-Night/
